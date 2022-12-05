@@ -1,0 +1,114 @@
+@startuml
+' uncomment the line below if you're using computer with a retina display
+' skinparam dpi 300
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+' we use bold for primary key
+' green color for unique
+' and underscore for not_null
+!define primary_key(x) <b>x</b>
+!define unique(x) <color:green>x</color>
+!define not_null(x) <u>x</u>
+' other tags available:
+' <i></i>
+' <back:COLOR></color>, where color is a color name or html color code
+' (#FFAACC)
+' see: http://plantuml.com/classes.html#More
+hide methods
+hide stereotypes
+
+' entities
+
+Table(user, "user\n(User in our system)") {
+primary_key(id) INTEGER
+not_null(firstname) VARCHAR[32]
+not_null(lastname) VARCHAR[255]
+not_null(password) VARCHAR[64]
+}
+
+' Table(session, "session\n(session for user)") {
+' primary_key(id) INTEGER
+' not_null(user_id) INTEGER
+' not_null(unique(session_id) VARCHAR[64])
+' }
+
+Table(user_role, "user_role\n(Some info of user)") {
+primary_key(user_id) INTEGER
+not_null (role) VARCHAR[64]
+}
+
+Table(comment, "comment\n(comment of users and recipes)") {
+primary_key(id) INTEGER
+not_null(comment_text) TEXT
+not_null(notation) INTEGER
+}
+
+Table(recipes, "recipes\n(recipes on our system)") {
+primary_key(id) INTEGER
+primary_key(created_at) DATETIME
+not_null(title) VARCHAR[255]
+not_null(description) TEXT
+not_null(instruction) TEXT
+not_null(cooktime) DATETIME
+not_null(baketime) DATETIME
+not_null(ingredient) TEXT
+not_null(illustration) VARCHAR[255]
+not_null(is_for_patient) BOOLEAN
+}
+
+Table(allergen, "allergen\n(allergen on our system)") {
+primary_key(id) INTEGER
+not_null(name) VARCHAR[255]
+}
+
+Table(type_of_diet, "type_of_diet\n(type_of_diet on our system)") {
+primary_key(id) INTEGER
+not_null(title) VARCHAR[255]
+not_null(description) TEXT
+}
+
+Table(FK_type_of_diet_recipes, "FK_type_of_diet_recipes\n(FK_type_of_diet_recipes on our system)") {
+not_null(type_of_diet_id) INTEGER
+joined on type_of_diet(id)
+not_null(recipes_id) INTEGER
+joined on recipes(id)
+}
+
+Table(FK_allergen_recipes, "FK_allergen_recipes\n(FK_allergen_recipes on our system)") {
+not_null(allergen_id) INTEGER
+joined on allergen(id)
+not_null(recipes_id) INTEGER
+joined on recipes(id)
+}
+
+Table(FK_allergen_user, "FK_allergen_user\n(FK_allergen_user on our system)") {
+not_null(allergen_id) INTEGER
+joined on allergen(id)
+not_null(user_id) INTEGER
+joined on user(id)
+}
+
+Table(FK_type_of_diet_user, "FK_type_of_diet_user\n(FK_type_of_diet_user on our system)") {
+not_null(type_of_diet_id) INTEGER
+joined on type_of_diet_id(id)
+not_null(user_id) INTEGER
+joined on user(id)
+}
+
+' relationships
+' one-to-one relationship
+user -- user_role : "A user only \nhas one role"
+' one to many relationship
+recipes --> FK_type_of_diet_recipes : "A recipes may have\n many FK_type_of_diet_recipes"
+recipes --> FK_allergen_recipes : "A recipes may have\n many FK_allergen_recipes"
+allergen --> FK_allergen_recipes : " A allergen may have\n many FK_allergen_recipes"
+type_of_diet --> FK_type_of_diet_recipes : "A type_of_diet may have\n many FK_type_of_diet_recipes"
+user -> comment : "A user may have\n many comment"
+user -> FK_allergen_user : "A user may have\n many FK_allergen_user"
+user --> FK_type_of_diet_user : "A user may have\n many FK_type_of_diet_user"
+allergen --> FK_allergen_user : " A allergen may have\n many FK_allergen_user"
+type_of_diet --> FK_type_of_diet_user : "A type_of_diet may have\n many FK_type_of_diet_user"
+' many to many relationship
+' Add mark if you like
+' user "1" --> "*" user_group : "A user may be \nin many groups"
+' group "1" --> "0..N" user_group : "A group may \ncontain many users"
+@enduml
