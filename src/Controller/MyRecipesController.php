@@ -11,7 +11,7 @@ class MyRecipesController extends AbstractController
     #[Route('/mes-fiches-recettes', name: 'app_my_recipes')]
     public function index(): Response
     {
-        return $this->render('my_recipes/index.html.twig', [
+        return $this->render('recipe/my_recipes.html.twig', [
             'controller_name' => 'MyRecipesController',
         ]);
     }
