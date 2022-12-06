@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte | Nutriforma
+{% endblock %}
+
+{% block content %}
+	<div class="container mt-5 pt-5">
+
+		<h1>Paramètres d'administration</h1>
+
+		<div class="container-block">
+			{% if is_granted('ROLE_ADMIN') %}
+				<div class="card m-3">
+					<div class="card-body">
+						<h5 class="card-title">Gestion des fiches recettes</h5>
+						<hr>
+						<p>
+							<a href="#">
+								Créer une fiche recette</a>
+						</p>
+						<p>
+							<a href="#">
+								Modifier une fiche recette</a>
+						</p>
+					</div>
+				</div>
+				<br>
+				<div class="card m-3">
+					<div class="card-body">
+						<h5 class="card-title">Gestion des patients</h5>
+						<hr>
+						<p>
+							<a href="#">
+								Créer un compte pour un patient</a>
+						</p>
+						<p>
+							<a href="#">
+								Modifier le compte d'un patient</a>
+						</p>
+					</div>
+				</div>
+			{% elseif is_granted('ROLE_USER') %}
+				<ul>
+					<a href="#">
+						<li>Modifier mon mot de passe</li>
+					</a>
+					<a href="#">
+						<li>Voir mes fiches recettes</li>
+					</a>
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
