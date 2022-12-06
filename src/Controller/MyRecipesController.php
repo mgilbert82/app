@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UserController extends AbstractController
+class MyRecipesController extends AbstractController
 {
-    #[Route('/user', name: 'app_user')]
+    #[Route('/mes-fiches-recettes', name: 'app_my_recipes')]
     public function index(): Response
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('my_recipes/index.html.twig', [
+            'controller_name' => 'MyRecipesController',
         ]);
     }
 }

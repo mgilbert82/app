@@ -4,27 +4,10 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container mt-5 pt-5">
+	<div class="container mt-5 pt-5 mb-5">
 		<h1>Enregistrer un nouveau patient</h1>
-		<form>
-			<div class="mb-3">
-				<label for="exampleInputEmail1" class="form-label">Adresse Email du patient</label>
-				<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Saisir l'email du patient">
-			</div>
-			<div class="mb-3">
-				<label for="exampleInputEmail1" class="form-label">Nom du patient</label>
-				<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Saisir le nom du patient">
-			</div>
-			<div class="mb-3">
-				<label for="exampleInputEmail1" class="form-label">Prénom du patient</label>
-				<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Saisir le prénom du patient">
-			</div>
-			<div class="mb-3">
-				<label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-				<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Saisir la date de naissance du client pour mot de passe">
-			</div>
-			<button type="submit" class="btn btn-block btn-info mb-5">Créer le patient</button>
-		</form>
 
-	</div>
-{% endblock %}
+		{{ form(form)}}
+
+		</div>
+	{% endblock %}
