@@ -4,9 +4,60 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container mt-5 pt-5">
-		<h1>Ajouter une nouvelle recette</h1>
+	<div class="container mt-5 pt-5 mb-4">
+		<h1 class="mb-4">Ajouter une nouvelle recette</h1>
 
-		{{ form(form) }}
+		<div class="card p-4 bg-light">
+			{{ form_start(form) }}
+			{{ form_row(form._token) }}
+
+			<div class="row">
+				<div class="col-md-12">
+					<strong>
+						{{ form_row(form.title)}}
+					</strong>
+				</div>
+				<div class="col-md-12">
+					<strong>
+						{{ form_row(form.description) }}
+					</strong>
+				</div>
+				<div class="col-md-12">
+					<strong>
+						{{ form_row(form.ingredient) }}
+					</strong>
+				</div>
+				<div class="col-md-12">
+					<strong>
+						{{ form_row(form.instruction) }}
+					</strong>
+				</div>
+				<div class="col-md-6 text-center">
+					<strong>
+						{{ form_row(form.cooktime) }}
+					</strong>
+				</div>
+				<div class="col-md-6 text-center">
+					<strong>
+						{{ form_row(form.baketime) }}
+					</strong>
+				</div>
+				<div class="col-md-6">
+					<strong>
+						{{ form_row(form.isforpatient) }}
+					</strong>
+				</div>
+				<div class="col-md-6">
+					<strong>
+						{{ form_row(form.illustration) }}
+					</strong>
+				</div>
+				<div class="col-md-12">
+					<strong>
+						{{ form_row(form.submit) }}
+					</strong>
+				</div>
+			</div>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}

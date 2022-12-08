@@ -38,7 +38,7 @@ class Recipe
     #[ORM\Column(length: 255)]
     private ?string $illustration = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $isforpatient = null;
 
     public function getId(): ?int

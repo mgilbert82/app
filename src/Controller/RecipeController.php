@@ -6,9 +6,11 @@ use App\Entity\Recipe;
 use App\Form\RecipeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RecipeController extends AbstractController
 {
@@ -23,7 +25,6 @@ class RecipeController extends AbstractController
     public function index(): Response
     {
         $recipe = $this->entityManager->getRepository(Recipe::class)->findAll();
-        dd($recipe);
 
         if (!$recipe) {
             return $this->render('my_recipe/index.html.twig', [
@@ -31,7 +32,7 @@ class RecipeController extends AbstractController
             ]);
         }
 
-        return $this->render('recipe/index.html.twig');
+        return $this->render('recipe/all_recipe.html.twig');
     }
 
     #[Route('/recette/{id}', name: 'app_recipe')]
@@ -43,20 +44,45 @@ class RecipeController extends AbstractController
             return $this->redirectToRoute('app_recipe');
         }
 
-        return $this->render('recipe/index.html.twig');
+        return $this->render('recipe/recipe.html.twig');
     }
 
     #[Route('/creer-une-recette', name: 'app_add_recipe')]
-    public function add_recipe(Request $request): Response
+    public function add_recipe(Request $request, SluggerInterface $slugger): Response
     {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
-
         $form->handleRequest($request);
-
+        dump($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $date = new \DateTimeImmutable;
+            $illustrationFile = $form->get('illustration')->getData();
+
+            if ($illustrationFile) {
+                $originalFilename = pathinfo(
+                    $illustrationFile->getClientOriginalName(),
+                    PATHINFO_FILENAME
+                );
+
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $illustrationFile->guessExtension();
+
+                try {
+                    $illustrationFile->move(
+                        $this->getParameter('recipe_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $error) {
+                    echo $error->getMessage();
+                }
+
+                $recipe->setIllustration($newFilename);
+            }
+            $recipe->setCreatedAt($date);
             $this->entityManager->persist($recipe);
             $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_my_recipe');
         }
         return $this->render('recipe/add_recipe.html.twig', [
             'form' => $form->createView(),

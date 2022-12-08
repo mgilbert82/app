@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Recipe;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -80,18 +79,20 @@ class RecipeType extends AbstractType
                 ],
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        'maxSize' => '2048k',
                         'mimeTypes' => [
-                            'image/jpg',
                             'image/jpeg',
                             'image/png',
                         ],
                         'mimeTypesMessage' => 'Veuillez importer une image valide',
+                        'notFoundMessage' => "Le fichier n'a pas été trouvé sur le disque",
+                        'uploadErrorMessage' => "Erreur dans l'upload du fichier"
                     ])
                 ],
             ])
             ->add('isforpatient', CheckboxType::class, [
                 'label' => 'Cette recette est réservé au patient',
+                'required' => false,
                 'attr' => [
                     'class' => 'input-group-text mb-4',
                 ]
@@ -108,6 +109,8 @@ class RecipeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Recipe::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token'
         ]);
     }
 }
